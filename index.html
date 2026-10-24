@@ -32,6 +32,42 @@
     }
   </style>
 </head>
+<!-- ▼ここから: LINEのアプリ内ブラウザ対策(index.html の </body> の直前に貼り付け) -->
+  <style>
+    .line-notice {
+      position: fixed; left: 0; right: 0; top: env(safe-area-inset-top); z-index: 10; display: none;
+      background: #fff7e6; color: #7a4b00; border-bottom: 1px solid #f0d9a8;
+      padding: 10px 14px; font-size: 13px; line-height: 1.5;
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif;
+    }
+    .line-notice b { display: block; font-size: 14px; }
+    .line-notice a {
+      display: inline-block; margin-top: 6px; padding: 6px 12px; border-radius: 14px;
+      background: #06c755; color: #fff; text-decoration: none; font-weight: 600;
+    }
+  </style>
+  <div class="line-notice" id="lineNotice">
+    <b>LINEの画面では写真の追加が止まることがあります</b>
+    右下(または右上)の「…」メニューから「ブラウザで開く」を選んでください。
+    <br><a id="lineOpenLink" href="#">Safari / Chromeで開く</a>
+  </div>
+  <script>
+    (function () {
+      // LINEのアプリ内ブラウザは、URLに openExternalBrowser=1 を付けると
+      // Safari(iPhone)/Chrome(Android)で開き直してくれる
+      if (!/Line\//i.test(navigator.userAgent)) return;
+      var url = location.origin + location.pathname;
+      var external = url + '?openExternalBrowser=1';
+      if (location.search.indexOf('openExternalBrowser=1') < 0) {
+        location.replace(external);
+        return;
+      }
+      // 自動で切り替わらなかった場合は案内を出す
+      document.getElementById('lineOpenLink').href = external;
+      document.getElementById('lineNotice').style.display = 'block';
+    })();
+  </script>
+  <!-- ▲ここまで -->
 <body>
   <div class="loading" id="loading">読み込み中…</div>
   <div class="frame-wrap">
